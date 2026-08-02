@@ -25,11 +25,12 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
-      - name: Install tfsec
-        uses: aquasecurity/tfsec-action@v1
-
-      - name: Run tfsec
-        run: tfsec --out=results.json --format=json .
+      - name: Install and Run tfsec
+        run: |
+          curl -s -L https://github.com/aquasecurity/tfsec/releases/latest/download/tfsec-linux-amd64 -o tfsec
+          chmod +x tfsec
+          sudo mv tfsec /usr/local/bin/tfsec
+          tfsec --out=results.json --format=json .
 
       - name: Terraform Apply
         run: terraform apply -auto-approve
